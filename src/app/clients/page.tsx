@@ -11,6 +11,8 @@ import {
 import {SidebarTrigger} from "@/components/ui/sidebar";
 import {Badge} from "@/components/ui/badge";
 import Link from "next/link";
+import {DialogTrigger} from "@/components/ui/dialog";
+import {CreateClientDialog} from "../../dialogs/CreateClientDialog";
 
 type Client = {
     id: number;
@@ -75,6 +77,9 @@ export default function () {
                     </BreadcrumbList>
                 </Breadcrumb>
             </header>
+            <div className="flex justify-end">
+                <CreateClientDialog/>
+            </div>
             <Table>
                 <TableCaption>A list of your recent invoices.</TableCaption>
                 <TableHeader>
