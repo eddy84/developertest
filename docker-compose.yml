@@ -1,0 +1,17 @@
+version: "3"
+services:
+  pgsql:
+    image: postgres:15
+    container_name: energy_postgres
+    networks:
+      - nestjs_local
+    environment:
+      PGPASSWORD: '${DATABASE_PASSWORD:-secret}'
+      POSTGRES_USER: '${DATABASE_USER}'
+      POSTGRES_PASSWORD: '${DATABASE_PASSWORD}'
+      POSTGRES_DB: '${DATABASE_NAME}'
+    ports:
+      - "${DATABASE_PORT}:5432"
+networks:
+  nestjs_local:
+    driver: bridge
