@@ -2,16 +2,20 @@ version: "3"
 services:
   pgsql:
     image: postgres:15
-    container_name: energy_postgres
+    container_name: developertest_postgres
     networks:
       - nestjs_local
     environment:
       PGPASSWORD: '${DATABASE_PASSWORD:-secret}'
-      POSTGRES_USER: '${DATABASE_USER}'
-      POSTGRES_PASSWORD: '${DATABASE_PASSWORD}'
-      POSTGRES_DB: '${DATABASE_NAME}'
+      POSTGRES_DB: '${DATABASE_NAME:-secret}'
+      POSTGRES_USER: '${DATABASE_USER:-secret}'
+      POSTGRES_PASSWORD: '${DATABASE_PASSWORD:-secret}'
     ports:
       - "${DATABASE_PORT}:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
+      retries: 3
+      timeout: 5s
 networks:
   nestjs_local:
     driver: bridge
