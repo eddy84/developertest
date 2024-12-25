@@ -13,52 +13,73 @@ import {CreateClientDialog} from "../dialogs/CreateClientDialog";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "../components/ui/table";
 import Link from "next/link";
 import {Badge} from "../components/ui/badge";
+import {QueryClientProvider, useQuery} from "@tanstack/react-query";
+import {QueryClient} from "@tanstack/query-core";
+import {ClientsResponse} from "@/types/Client";
+import {UpdateClientDialog} from "../dialogs/UpdateClientDialog";
 
-type Client = {
-    id: number;
-    name: string;
-    email: string;
-    street: string;
-    postcode: string;
-    city: string;
+
+// react query client which is usually added in a client component in the layout
+const queryClient = new QueryClient()
+
+const ClientsTable = () => {
+
+    const result = useQuery<ClientsResponse>({
+        queryKey: ['clients'],
+        queryFn: async () => {
+            const response = await fetch('/api/clients')
+            if (!response.ok) {
+                throw new Error('Network response was not ok')
+            }
+            return response.json()
+        },
+    })
+
+    console.log(JSON.stringify(result.data));
+    const data = result.data?.clients ?? []
+
+    return <Table>
+        {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
+        <TableHeader>
+            <TableRow>
+                <TableHead className="w-[180px]">Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>E-Mail</TableHead>
+                <TableHead className="w-[100px] text-right">PLZ</TableHead>
+                <TableHead className="w-[150px]">Stadt</TableHead>
+                <TableHead>Straße</TableHead>
+                <TableHead className="w-[80px] text-right">Aktionen</TableHead>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            {data.length === 0 && (
+                <TableRow>
+                    <TableCell
+                        colSpan={7}
+                        className='h-24 text-center'
+                    >
+                        Keine Einträge gefunden.
+                    </TableCell>
+                </TableRow>
+            )}
+            {data.map((client, index) =>
+                <TableRow key={index}>
+                    <TableCell><Link href={`clients/${client.id}`}>{client.name}</Link></TableCell>
+                    <TableCell><Badge variant={"secondary"}>aktiv</Badge></TableCell>
+                    <TableCell>{client.email}</TableCell>
+                    <TableCell className="text-right">{client.postcode}</TableCell>
+                    <TableCell>{client.city}</TableCell>
+                    <TableCell>{client.street}</TableCell>
+                    <TableCell className="text-center"><UpdateClientDialog client={client}/></TableCell>
+                </TableRow>
+            )}
+
+        </TableBody>
+    </Table>
 }
 
-const data: Client[] = [
-    {
-        id: 1,
-        name: 'Max Mustermann',
-        email: 'max.mustermann@example.com',
-        street: 'musterallee 12',
-        postcode: '80331',
-        city: 'München'
-    },
-    {
-        id: 2,
-        name: 'Heidi Sommer',
-        email: 'heidi.sommer@example.com',
-        street: 'Kurfüstendamm 12',
-        postcode: '10115',
-        city: 'Berlin'
-    },
-    {
-        id: 3,
-        name: 'Gertrud Röhrig',
-        email: 'gertrud.roehrig@example.com',
-        street: 'Kanalplatz 33',
-        postcode: '50331',
-        city: 'Düsseldorf'
-    },
-    {
-        id: 4,
-        name: 'Anneliese Müller',
-        email: 'anneliese.mueller@example.com',
-        street: 'Rheingraben 127',
-        postcode: '30331',
-        city: 'Karlsruhe'
-    },
-]
+export const ClientsPage = () => {
 
-export const ClientsPage = ()=> {
     return <div className="flex flex-1 flex-col gap-4 p-4">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
             <SidebarTrigger/>
@@ -80,35 +101,8 @@ export const ClientsPage = ()=> {
         <div className="flex justify-end">
             <CreateClientDialog/>
         </div>
-        <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[30px]">Id</TableHead>
-                    <TableHead className="w-[180px]">Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>E-Mail</TableHead>
-                    <TableHead className="w-[100px] text-right">PLZ</TableHead>
-                    <TableHead className="w-[150px]">Stadt</TableHead>
-                    <TableHead>Straße</TableHead>
-                    <TableHead className="w-[80px] text-right">Aktionen</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.map((client, index) =>
-                    <TableRow key={index}>
-                        <TableCell className="font-medium">{client.id}</TableCell>
-                        <TableCell><Link href={`clients/${client.id}`}>{client.name}</Link></TableCell>
-                        <TableCell><Badge variant={"secondary"}>aktiv</Badge></TableCell>
-                        <TableCell>{client.email}</TableCell>
-                        <TableCell className="text-right">{client.postcode}</TableCell>
-                        <TableCell>{client.city}</TableCell>
-                        <TableCell>{client.street}</TableCell>
-                        <TableCell className="text-center">[]</TableCell>
-                    </TableRow>
-                )}
-
-            </TableBody>
-        </Table>
+        <QueryClientProvider client={queryClient}>
+            <ClientsTable/>
+        </QueryClientProvider>
     </div>
 }
