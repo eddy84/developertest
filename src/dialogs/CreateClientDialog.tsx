@@ -35,7 +35,7 @@ export const CreateClientDialog = () => {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify(values)
-        })
+        });
 
         console.log(response);
         if (response.status === 200) {
@@ -50,10 +50,8 @@ export const CreateClientDialog = () => {
             toast({
                 title: 'Nutzer konnte nicht angelegt werden.',
                 variant: "destructive"
-            })
+            });
         }
-
-
     }
 
     return <Dialog>
