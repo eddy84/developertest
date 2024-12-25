@@ -33,8 +33,8 @@ import {usePathname} from "next/navigation";
 // This is sample data
 const data = {
     user: {
-        name: "shadcn",
-        email: "m@example.com",
+        name: "Admin",
+        email: "admin@example.com",
         avatar: "/avatars/shadcn.jpg",
     },
 }

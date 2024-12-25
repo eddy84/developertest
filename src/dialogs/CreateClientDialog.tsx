@@ -14,15 +14,19 @@ import {useForm} from "react-hook-form";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useId} from "react";
+import {useId, useState} from "react";
 import {CreateClientInput, createClientInputSchema} from "@/schemas/CreateClientInput";
 import {useToast} from "@/hooks/use-toast";
+import {useQueryClient} from "@tanstack/react-query";
 
 const initialValues = {name: '', email: '', street: '', postcode: '', city: ''};
 
 export const CreateClientDialog = () => {
     const {toast} = useToast();
     const formId = useId();
+    const [open, setOpen] = useState(false);
+    const queryClient = useQueryClient()
+
     const form = useForm<CreateClientInput>({
         defaultValues: initialValues,
         resolver: zodResolver(createClientInputSchema)
@@ -43,18 +47,25 @@ export const CreateClientDialog = () => {
 
             form.reset(initialValues);
 
+
             toast({
                 title: 'Nutzer wurde erfolgreich angelegt.'
             });
+
+            await queryClient.invalidateQueries({queryKey: ['clients']})
+
+            setOpen(false);
+
         } else {
             toast({
                 title: 'Nutzer konnte nicht angelegt werden.',
                 variant: "destructive"
             });
         }
+
     }
 
-    return <Dialog>
+    return <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
             <Button variant="outline"><Plus/> Neuer Nutzer</Button>
         </DialogTrigger>

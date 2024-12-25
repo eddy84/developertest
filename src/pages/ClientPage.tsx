@@ -98,10 +98,11 @@ export const ClientsPage = () => {
                 </BreadcrumbList>
             </Breadcrumb>
         </header>
-        <div className="flex justify-end">
-            <CreateClientDialog/>
-        </div>
         <QueryClientProvider client={queryClient}>
+
+            <div className="flex justify-end">
+                <CreateClientDialog/>
+            </div>
             <ClientsTable/>
         </QueryClientProvider>
     </div>
