@@ -11,17 +11,20 @@ import {
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
 import {useForm} from "react-hook-form";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useId} from "react";
 import {CreateClientInput, createClientInputSchema} from "@/schemas/CreateClientInput";
+import {useToast} from "@/hooks/use-toast";
+
+const initialValues = {name: '', email: '', street: '', postcode: '', city: ''};
 
 export const CreateClientDialog = () => {
-
+    const {toast} = useToast();
     const formId = useId();
     const form = useForm<CreateClientInput>({
-        defaultValues: {name: '', email: '',street: '', postcode: '', city: ''},
+        defaultValues: initialValues,
         resolver: zodResolver(createClientInputSchema)
     });
 
@@ -35,12 +38,19 @@ export const CreateClientDialog = () => {
         })
 
         console.log(response);
-        if(response.status === 200) {
+        if (response.status === 200) {
             const content = await response.json();
 
-            console.log(content);
+            form.reset(initialValues);
 
-            form.reset({name: '', email: '',street: '', postcode: '', city: ''});
+            toast({
+                title: 'Nutzer wurde erfolgreich angelegt.'
+            });
+        } else {
+            toast({
+                title: 'Nutzer konnte nicht angelegt werden.',
+                variant: "destructive"
+            })
         }
 
 
@@ -68,8 +78,7 @@ export const CreateClientDialog = () => {
                                 <FormControl>
                                     <Input placeholder="Max Mustermann" {...field}/>
                                 </FormControl>
-                                {/*<FormDescription>Diese ist der Benutzername</FormDescription>*/}
-                                <FormMessage />
+                                <FormMessage/>
                             </FormItem>
                         )}/>
                         <FormField name="email" render={({field}) => (
@@ -78,7 +87,6 @@ export const CreateClientDialog = () => {
                                 <FormControl>
                                     <Input placeholder="max.mustermann@example.com" {...field}/>
                                 </FormControl>
-                                {/*<FormDescription>Diese ist der Benutzername</FormDescription>*/}
                                 <FormMessage/>
                             </FormItem>
                         )}/>
@@ -89,7 +97,6 @@ export const CreateClientDialog = () => {
                                 <FormControl>
                                     <Input placeholder="e.g. Musterstraße" {...field}/>
                                 </FormControl>
-                                {/*<FormDescription>Diese ist der Benutzername</FormDescription>*/}
                                 <FormMessage/>
                             </FormItem>
                         )}/>
@@ -101,18 +108,17 @@ export const CreateClientDialog = () => {
                                     <FormControl>
                                         <Input placeholder="PLZ eingeben" {...field}/>
                                     </FormControl>
-                                    {/*<FormDescription>Diese ist der Benutzername</FormDescription>*/}
                                     <FormMessage/>
                                 </FormItem>
                             )}/>
 
                             <FormField name="city" render={({field}) => (
                                 <FormItem className="col-span-2">
-                                    <FormLabel>Stadt {!createClientInputSchema.shape.city.isOptional() && <span className="text-destructive">*</span>}</FormLabel>
+                                    <FormLabel>Stadt {!createClientInputSchema.shape.city.isOptional() &&
+                                        <span className="text-destructive">*</span>}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g. Musterstadt" {...field}/>
                                     </FormControl>
-                                    {/*<FormDescription>Diese ist der Benutzername</FormDescription>*/}
                                     <FormMessage/>
                                 </FormItem>
                             )}/>
