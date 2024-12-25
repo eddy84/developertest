@@ -36,9 +36,6 @@ export async function POST(request: NextRequest) {
         client.street = input.street;
         client.postcode = input.postcode;
         client.city = input.city;
-        if (input.notes !== undefined) {
-            client.notes = input.notes;
-        }
 
         const clientSaved = await repository.save(client);
 

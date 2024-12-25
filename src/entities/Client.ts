@@ -20,7 +20,4 @@ export class Client {
 
     @Column('varchar', {length: '30'})
     city: string;
-
-    @Column('varchar', {nullable: true, length: '2000'})
-    notes: string | null;
 }

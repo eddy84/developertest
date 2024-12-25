@@ -39,12 +39,6 @@ export class CreateTableClients1735040844879 implements MigrationInterface {
                         length: '30',
                     },
                     {
-                        name: 'notes',
-                        type: 'varchar',
-                        isNullable: true,
-                        length: '2000',
-                    },
-                    {
                         name: 'createdAt',
                         type: 'timestamptz',
                         default: 'CURRENT_TIMESTAMP',
