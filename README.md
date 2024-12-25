@@ -55,5 +55,22 @@ We use the latest technologies in our projects e.g. (NextJS, NestJS, shadcn/ui, 
 - [NestJS](https://nestjs.com/) - a progressive Node.js framework for building efficient, reliable and scalable server-side applications.
 - [NestJS Graphql](https://docs.nestjs.com/graphql) - graphql implementation for NestJS
 
+## Important notes
 
+- ```npm run psql``` - logs you into the database
+- ```npm run migrate:fresh``` - drops all tables and runs the migrations from scratch
+- ```npm run migrate``` - run new migrations
+- ```npm run typeorm``` - run the typeorm cli e.g. to create migrations
+- We use NextJS with app router, so the endpoints are inside the src/app folder
+- You need to set all default values of useForm hook otherwise you receive errors
+- 
 
+## Task
+
+The task is to enhance to Client object listed in the "Stammdaten" tab with a notes field.
+
+- Create your own branch for the test
+- Create a new migration to add another column notes (varchar, nullable, maxlength: 2000) to the clients table
+- Add a update client validation schema using zod library in src/schemas
+- Implement the api end point to update clients /api/clients/[id]
+- Implement the UpdateClientDialog
