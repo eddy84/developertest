@@ -9,45 +9,41 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {FormInput, Plus} from "lucide-react";
+import {Plus} from "lucide-react";
 import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useId} from "react";
-
-// type CreateClientInput = {
-//     name: string;
-//     email: string;
-//     street: string;
-//     postcode: string;
-//     city: string;
-//     note?: string;
-// }
-
-const formSchema = z.object({
-    name: z.string().min(6),
-    email: z.string().email(),
-    street: z.string().min(3),
-    postcode: z.string().min(4),
-    city: z.string().min(3),
-    note: z.string().max(2000).optional()
-});
-
-type CreateClientInput = z.infer<typeof formSchema>;
+import {CreateClientInput, createClientInputSchema} from "@/schemas/CreateClientInput";
 
 export const CreateClientDialog = () => {
 
     const formId = useId();
     const form = useForm<CreateClientInput>({
         defaultValues: {name: '', email: '',street: '', postcode: '', city: ''},
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(createClientInputSchema)
     });
 
-    const onSubmit = (values: CreateClientInput) => {
+    const onSubmit = async (values: CreateClientInput) => {
 
-        form.reset({name: '', email: '',street: '', postcode: '', city: ''});
+
+        const response = await fetch('/api/clients', {
+            method: 'POST',
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+            body: JSON.stringify(values)
+        })
+
+        console.log(response);
+        if(response.status === 200) {
+            const content = await response.json();
+
+            console.log(content);
+
+            form.reset({name: '', email: '',street: '', postcode: '', city: ''});
+        }
+
+
     }
 
     return <Dialog>
@@ -112,7 +108,7 @@ export const CreateClientDialog = () => {
 
                             <FormField name="city" render={({field}) => (
                                 <FormItem className="col-span-2">
-                                    <FormLabel>Stadt {!formSchema.shape.city.isOptional() && <span className="text-destructive">*</span>}</FormLabel>
+                                    <FormLabel>Stadt {!createClientInputSchema.shape.city.isOptional() && <span className="text-destructive">*</span>}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g. Musterstadt" {...field}/>
                                     </FormControl>
