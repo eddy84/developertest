@@ -47,8 +47,9 @@ const ClientsTable = () => {
                 <TableHead>E-Mail</TableHead>
                 <TableHead className="w-[100px] text-right">PLZ</TableHead>
                 <TableHead className="w-[150px]">Stadt</TableHead>
-                <TableHead>Straße</TableHead>
-                <TableHead className="w-[80px] text-right">Aktionen</TableHead>
+                <TableHead >Straße</TableHead>
+                <TableHead className="w-[180px]">Notes </TableHead>
+                <TableHead className="w-[180px] text-right">Aktionen</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -70,6 +71,7 @@ const ClientsTable = () => {
                     <TableCell className="text-right">{client.postcode}</TableCell>
                     <TableCell>{client.city}</TableCell>
                     <TableCell>{client.street}</TableCell>
+                    <TableCell >{client.notes}</TableCell>
                     <TableCell className="text-center"><UpdateClientDialog client={client}/></TableCell>
                 </TableRow>
             )}

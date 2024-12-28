@@ -5,6 +5,7 @@ export type Client = {
     street: string;
     postcode: string;
     city: string;
+    notes: string;
 }
 
 export type ClientsResponse = {

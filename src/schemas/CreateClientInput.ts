@@ -6,6 +6,7 @@ export const createClientInputSchema = z.object({
     street: z.string().min(3),
     postcode: z.string().min(4),
     city: z.string().min(3),
+    notes: z.string(),
 });
 
 export type CreateClientInput = z.infer<typeof createClientInputSchema>;

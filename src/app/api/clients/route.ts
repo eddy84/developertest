@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
         client.street = input.street;
         client.postcode = input.postcode;
         client.city = input.city;
+        client.notes = input.notes;
 
         const clientSaved = await repository.save(client);
 

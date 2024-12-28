@@ -1,4 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { nullable } from "zod";
 
 
 @Entity('clients')
@@ -20,4 +21,7 @@ export class Client {
 
     @Column('varchar', {length: '30'})
     city: string;
+
+    @Column('varchar', {length: '2000'})
+    notes: string;
 }

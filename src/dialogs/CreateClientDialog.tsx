@@ -18,8 +18,9 @@ import {useId, useState} from "react";
 import {CreateClientInput, createClientInputSchema} from "@/schemas/CreateClientInput";
 import {useToast} from "@/hooks/use-toast";
 import {useQueryClient} from "@tanstack/react-query";
+import { Textarea } from "@/components/ui/textarea";
 
-const initialValues = {name: '', email: '', street: '', postcode: '', city: ''};
+const initialValues = {name: '', email: '', street: '', postcode: '', city: '', notes: ''};
 
 export const CreateClientDialog = () => {
     const {toast} = useToast();
@@ -131,6 +132,15 @@ export const CreateClientDialog = () => {
                                 </FormItem>
                             )}/>
                         </div>
+                        <FormField name="notes" render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Notes</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Dieser Nutzer ist  ...." {...field}/>
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}/>
                     </form>
                 </Form>
             </div>
