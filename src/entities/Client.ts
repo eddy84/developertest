@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import { nullable } from "zod";
+
 
 
 @Entity('clients')

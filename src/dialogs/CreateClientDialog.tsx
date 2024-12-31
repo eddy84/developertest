@@ -47,8 +47,6 @@ export const CreateClientDialog = () => {
             const content = await response.json();
 
             form.reset(initialValues);
-
-
             toast({
                 title: 'Nutzer wurde erfolgreich angelegt.'
             });
